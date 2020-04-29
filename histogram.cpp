@@ -37,6 +37,34 @@ vector<size_t> make_histogram(vector<double> numbers, size_t bin_count)
     }
     return bins;
 }
+int scaling_needed(const vector<size_t>& bins, const auto BLOCK_WIDTH, const auto MAX_WIDTH) {
+    if (bins.size() == 0) {
+        cerr << "Error: the array can't be empty";
+        return -1;
+    }
+    size_t max_width = BLOCK_WIDTH*bins[0];
+    for (size_t bin : bins) {
+        if (BLOCK_WIDTH*bin > max_width) {
+        max_width = BLOCK_WIDTH*bin;
+        }
+    }
+    if (max_width > MAX_WIDTH) {
+        return 0;
+    }
+    else {
+        return 1;
+    }
+
+}
+double max_width (const vector<size_t>&bins, const auto BLOCK_WIDTH) {
+    size_t max_width = BLOCK_WIDTH*bins[0];
+    for (size_t bin: bins) {
+        if (BLOCK_WIDTH*bin > max_width) {
+        max_width = BLOCK_WIDTH*bin;
+        }
+    }
+    return max_width;
+}
 
 void
 svg_begin(double width, double height)
@@ -80,15 +108,11 @@ show_histogram_svg(const vector<size_t>& bins, const double stroke_width, const 
     const auto VERTICAL_GAP = 10;
     const auto MAX_WIDTH = IMAGE_WIDTH - TEXT_WIDTH;
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
-    double top = 0;
-    size_t max_width = BLOCK_WIDTH*bins[0];
-    for (size_t bin : bins) {
-        if (BLOCK_WIDTH*bin > max_width) {
-        max_width = BLOCK_WIDTH*bin;
-        }
-    }
-    if (max_width > MAX_WIDTH) {
-    const double scaling_factor = (double)MAX_WIDTH / max_width;
+    double top = 10;
+    if (!(scaling_needed(bins, BLOCK_WIDTH, MAX_WIDTH))) {
+    size_t max;
+    max = max_width(bins, BLOCK_WIDTH);
+    const double scaling_factor = (double)MAX_WIDTH / max;
     for (size_t bin : bins)
         {
         const double bin_width = BLOCK_WIDTH * bin * scaling_factor;

@@ -40,6 +40,15 @@ void test_null() {
     assert (min == MIN);
     assert (max == MAX);
 }
+void test_scaling_positive() {
+    assert(!scaling_needed({100}, 10, 50));
+}
+void test_scaling_negative() {
+    assert(scaling_needed({10}, 10, 200));
+}
+void test_scaling_null() {
+    assert(scaling_needed({}, 10, 50) == -1);
+}
 int
 main() {
     test_positive();
@@ -47,4 +56,7 @@ main() {
     test_equal();
     test_sole();
     test_null();
+    test_scaling_positive();
+    test_scaling_negative();
+    test_scaling_null();
 }
