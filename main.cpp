@@ -30,7 +30,12 @@ int main()
     size_t bin_count;
     cerr << "Enter column count: ";
     cin >> bin_count;
+    double stroke_width;
+    double stroke_gap;
+    cerr << "Enter stroke-dasharray properties: ";
+    cin >> stroke_width;
+    cin >> stroke_gap;
     const auto bins = make_histogram(numbers, bin_count);
-    show_histogram_svg(bins);
+    show_histogram_svg(bins, stroke_width, stroke_gap);
     return 0;
 }

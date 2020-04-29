@@ -63,8 +63,12 @@ void svg_rect(double x, double y, double width, double height, string stroke = "
 {
     cout << "<rect x = '"<< x << "' y = '" << y << "' width = '" << width << " ' height = '" << height << "' stroke = '" << stroke << "' fill = ' " << fill << "'/>";
 }
+void svg_line(double x2,  double y, double stroke_width, double stroke_gap) {
+    cout << " <line stroke-dasharray='" << stroke_width << ", " << stroke_gap << "' x1='" << 0 << "'  y1= '" << y  << "' y2 = '"<< y << "' x2='" << x2 << "' style='stroke: rgb(0, 0, 0)'></line>\n";
+
+}
 void
-show_histogram_svg(const vector<size_t>& bins)
+show_histogram_svg(const vector<size_t>& bins, const double stroke_width, const double stroke_gap)
 {
     const auto IMAGE_WIDTH = 400;
     const auto IMAGE_HEIGHT = 300;
@@ -73,6 +77,7 @@ show_histogram_svg(const vector<size_t>& bins)
     const auto TEXT_WIDTH = 50;
     const auto BIN_HEIGHT = 30;
     const auto BLOCK_WIDTH = 10;
+    const auto VERTICAL_GAP = 10;
     const auto MAX_WIDTH = IMAGE_WIDTH - TEXT_WIDTH;
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
     double top = 0;
@@ -89,7 +94,10 @@ show_histogram_svg(const vector<size_t>& bins)
         const double bin_width = BLOCK_WIDTH * bin * scaling_factor;
         svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
         svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "blue", "#aaffaa");
-        top += BIN_HEIGHT;
+        top += BIN_HEIGHT+VERTICAL_GAP;
+        svg_line(IMAGE_WIDTH, top, stroke_width, stroke_gap);
+        top +=VERTICAL_GAP;
+
     }
     }
     else {
@@ -98,7 +106,9 @@ show_histogram_svg(const vector<size_t>& bins)
         const double bin_width = BLOCK_WIDTH * bin;
         svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
         svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "blue", "#aaffaa");
-        top += BIN_HEIGHT;
+        top += BIN_HEIGHT+VERTICAL_GAP;
+        svg_line(IMAGE_WIDTH, top, stroke_width, stroke_gap);
+        top +=VERTICAL_GAP;
     }
     }
     svg_end();
