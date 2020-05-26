@@ -2,10 +2,11 @@
 #include <iostream>
 #include <vector>
 #include "histogram.h"
-
+#include <curl/curl.h>
 using namespace std;
 int main()
 {
+    curl_global_init(CURL_GLOBAL_ALL);
     const auto input = read_input(cin, true);
     /* size_t number_count;
     cerr << "Enter number count: ";
