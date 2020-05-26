@@ -21,16 +21,16 @@ find_minmax(vector<double> numbers, double& min, double& max)
         }
     }
 }
-vector<size_t> make_histogram(vector<double> numbers, size_t bin_count)
+vector<size_t> make_histogram(Input data)
 {
-    double min = numbers[0];
-    double max = numbers[0];
-    find_minmax(numbers, min, max);
-    vector<size_t> bins(bin_count);
-    for (double number : numbers)
+    double min = data.numbers[0];
+    double max = data.numbers[0];
+    find_minmax(data.numbers, min, max);
+    vector<size_t> bins(data.bin_count);
+    for (double number : data.numbers)
     {
-        size_t bin = (size_t)((number - min) / (max - min) * bin_count);
-        if (bin == bin_count)
+        size_t bin = (size_t)((number - min) / (max - min) * data.bin_count);
+        if (bin == data.bin_count)
         {
             bin--;
         }

@@ -2,8 +2,12 @@
 #include <vector>
 #include <string>
 using namespace std;
+struct Input {
+    vector<double> numbers;
+    size_t bin_count;
+};
 void find_minmax(vector<double> numbers, double& min, double& max);
-vector<size_t> make_histogram(vector<double> numbers, size_t bin_count);
+vector<size_t> make_histogram(Input data);
 void svg_begin(double width, double height);
 void svg_end();
 void svg_text(double left, double baseline, string text);
