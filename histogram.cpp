@@ -1,6 +1,36 @@
 #include "histogram.h"
 #include <iostream>
 using namespace std;
+vector<double>
+input_numbers(istream& in, size_t count)
+{
+    vector<double> result(count);
+    for (size_t i = 0; i < count; i++)
+    {
+        in >> result[i];
+    }
+    return result;
+}
+Input
+read_input(istream& in, bool prompt) {
+    Input data;
+    if (prompt) {
+    cerr << "Enter number count: ";
+    }
+    size_t number_count;
+    cin >> number_count;
+    if (prompt) {
+    cerr << "Enter numbers: ";
+    }
+    data.numbers = input_numbers(in, number_count);
+    if (prompt) {
+    cerr << "Enter column count: ";
+    }
+    size_t bin_count;
+    cin >> bin_count;
+    data.bin_count = bin_count;
+    return data;
+}
 void
 find_minmax(vector<double> numbers, double& min, double& max)
 {
