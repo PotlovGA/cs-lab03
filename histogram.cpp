@@ -18,7 +18,7 @@ read_input(istream& in, bool prompt) {
     cerr << "Enter number count: ";
     }
     size_t number_count;
-    cin >> number_count;
+    in >> number_count;
     if (prompt) {
     cerr << "Enter numbers: ";
     }
@@ -27,7 +27,7 @@ read_input(istream& in, bool prompt) {
     cerr << "Enter column count: ";
     }
     size_t bin_count;
-    cin >> bin_count;
+    in >> bin_count;
     data.bin_count = bin_count;
     return data;
 }

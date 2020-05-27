@@ -3,31 +3,51 @@
 #include <vector>
 #include "histogram.h"
 #include <curl/curl.h>
+#include <sstream>
+#include <string>
 using namespace std;
-
-int main(int argc, char* argv[])
-{
+size_t
+write_data(void* item, size_t item_size, size_t item_count, void* ctx) {
+    size_t data_size;
+    data_size = item_count * item_size;
+    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
+    const char* items = reinterpret_cast<const char*>(item);
+    buffer->write(items, data_size);
+    return data_size;
+}
+Input
+download(const string& address) {
+    stringstream buffer;
     curl_global_init(CURL_GLOBAL_ALL);
-    if (argc > 1)
-    {
-        CURL *curl = curl_easy_init();
+    CURL *curl = curl_easy_init();
         if(curl)
         {
             CURLcode res;
-            curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
+            curl_easy_setopt(curl, CURLOPT_URL, address.c_str());
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
             res = curl_easy_perform(curl);
-            curl_easy_cleanup(curl);
+
             if (res!=0)
             {
                 cerr << curl_easy_strerror(res);
                 exit(1);
             }
         }
+     curl_easy_cleanup(curl);
+    return read_input(buffer, true);
+}
 
-        return 0;
+int
+main(int argc, char* argv[]) {
+    Input input;
+    if (argc > 1) {
+        input = download(argv[1]);
+    } else {
+        input = read_input(cin, true);
     }
 
-    const auto input = read_input(cin, true);
+
     /* size_t number_count;
     cerr << "Enter number count: ";
     cin >> number_count;

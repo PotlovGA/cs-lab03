@@ -31,11 +31,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add directory="curl/include" />
 		</Compiler>
 		<Linker>
 			<Add option="-static-libstdc++" />
 			<Add option="-static-libgcc" />
 			<Add option="-static" />
+			<Add library="curl/lib/libcurl.dll.a" />
+			<Add directory="curl/lib" />
 		</Linker>
 		<Unit filename=".gitignore" />
 		<Unit filename="histogram.cpp" />
