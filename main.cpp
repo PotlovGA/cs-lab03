@@ -27,7 +27,12 @@ download(const string& address) {
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
             res = curl_easy_perform(curl);
-
+            long req;
+            res = curl_easy_getinfo(curl, CURLINFO_REQUEST_SIZE, &req);
+            if(!res) {
+                cerr << "Request size: " << req << " bytes\n";
+            }
+            res = curl_easy_perform(curl);
             if (res!=0)
             {
                 cerr << curl_easy_strerror(res);
