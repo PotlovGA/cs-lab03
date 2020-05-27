@@ -35,7 +35,7 @@ download(const string& address) {
             }
         }
      curl_easy_cleanup(curl);
-    return read_input(buffer, true);
+    return read_input(buffer, false);
 }
 
 int
@@ -46,28 +46,7 @@ main(int argc, char* argv[]) {
     } else {
         input = read_input(cin, true);
     }
-
-
-    /* size_t number_count;
-    cerr << "Enter number count: ";
-    cin >> number_count;
-    if (!number_count)
-    {
-        cerr << "Error: the array can't be empty";
-        return 0;
-    }
-    cerr << "Enter numbers: ";
-    const auto numbers = input_numbers(cin, number_count);
-    size_t bin_count;
-    cerr << "Enter column count: ";
-    cin >> bin_count;
-    */
-    double stroke_width;
-    double stroke_gap;
-    cerr << "Enter stroke-dasharray properties: ";
-    cin >> stroke_width;
-    cin >> stroke_gap;
     const auto bins = make_histogram(input);
-    show_histogram_svg(bins, stroke_width, stroke_gap);
+    show_histogram_svg(bins, input.stroke_width, input.stroke_gap);
     return 0;
 }

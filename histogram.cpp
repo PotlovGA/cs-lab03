@@ -29,6 +29,11 @@ read_input(istream& in, bool prompt) {
     size_t bin_count;
     in >> bin_count;
     data.bin_count = bin_count;
+    if (prompt) {
+    cerr << "Enter stroke-dasharray properties: ";
+    }
+    in >> data.stroke_width;
+    in >> data.stroke_gap;
     return data;
 }
 void

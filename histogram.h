@@ -5,6 +5,8 @@ using namespace std;
 struct Input {
     vector<double> numbers;
     size_t bin_count;
+    double stroke_width;
+    double stroke_gap;
 };
 vector<double>
 input_numbers(istream& in, size_t count);
