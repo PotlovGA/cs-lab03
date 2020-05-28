@@ -18,7 +18,12 @@ input_numbers(size_t count)
 
 int main()
 {
+    const char* name = "Commander Shepard";
+    int year = 2154;
+    printf("%s was born in %d.\n", name, year);
     size_t number_count;
+    printf("n = %08x\n", 0x1234567);
+    return 0;
     cerr << "Enter number count: ";
     cin >> number_count;
     if (!number_count) {
