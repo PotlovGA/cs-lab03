@@ -27,9 +27,12 @@ int main()
         DWORD version_major = version & mask_major;
         DWORD version_minor = version >> 8;
         DWORD build = platform;
-        printf("Windows v%u.%u (build %u)", version_major, version_minor, build);
+        printf("Windows v%u.%u (build %u)\n", version_major, version_minor, build);
     }
-
+    TCHAR  computer_name[MAX_COMPUTERNAME_LENGTH+1];
+    DWORD  nSize = MAX_COMPUTERNAME_LENGTH+1;
+    GetComputerName( computer_name, &nSize );
+    cout << computer_name;
     return 0;
     size_t number_count;
     cerr << "Enter number count: ";
