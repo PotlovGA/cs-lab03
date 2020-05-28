@@ -1,4 +1,4 @@
-
+#include <windows.h>
 #include <iostream>
 #include <vector>
 #include "histogram.h"
@@ -18,6 +18,10 @@ input_numbers(size_t count)
 
 int main()
 {
+    DWORD info = GetVersion();
+    printf("version(dec): %u\n", info);
+    printf("version(hex): %x\n", info);
+    return 0;
     size_t number_count;
     cerr << "Enter number count: ";
     cin >> number_count;
