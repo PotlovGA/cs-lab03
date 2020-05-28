@@ -1,7 +1,11 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <windows.h>
+#include <sstream>
 using namespace std;
+vector<double>input_numbers(size_t count);
+string make_info_text();
 void find_minmax(vector<double> numbers, double& min, double& max);
 vector<size_t> make_histogram(vector<double> numbers, size_t bin_count);
 void svg_begin(double width, double height);

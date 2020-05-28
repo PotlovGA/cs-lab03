@@ -1,23 +1,57 @@
 #include "histogram.h"
 #include <iostream>
 using namespace std;
+vector<double>
+input_numbers(size_t count)
+{
+    vector<double> result(count);
+    for (size_t i = 0; i < count; i++)
+    {
+        cin >> result[i];
+    }
+    return result;
+}
+
+string
+make_info_text()
+{
+    stringstream buffer;
+    DWORD info = GetVersion();
+    DWORD mask = 0x0000ffff;
+    DWORD version = info & mask;
+    DWORD platform = info >> 16;
+    DWORD mask_major = 0x0000ff;
+    if ((info & 0x80000000) == 0)
+    {
+        DWORD version_major = version & mask_major;
+        DWORD version_minor = version >> 8;
+        DWORD build = platform;
+
+        TCHAR  computer_name[MAX_COMPUTERNAME_LENGTH+1];
+        DWORD  nSize = MAX_COMPUTERNAME_LENGTH+1;
+        GetComputerName( computer_name, &nSize );
+        buffer << "Windows v" << version_major << "." << version_minor << " (build " << build << ")\n" << "Computer name: " << computer_name;
+    }
+    return buffer.str();
+}
 void
 find_minmax(vector<double> numbers, double& min, double& max)
 {
-    if (numbers.size()) {
-    min = numbers[0];
-    max = numbers[0];
-    for (double number : numbers)
+    if (numbers.size())
     {
-        if (number < min)
+        min = numbers[0];
+        max = numbers[0];
+        for (double number : numbers)
         {
-            min = number;
+            if (number < min)
+            {
+                min = number;
+            }
+            if (number > max)
+            {
+                max = number;
+            }
         }
-        if (number > max)
-        {
-            max = number;
-        }
-    }
     }
 }
 vector<size_t> make_histogram(vector<double> numbers, size_t bin_count)
@@ -37,30 +71,39 @@ vector<size_t> make_histogram(vector<double> numbers, size_t bin_count)
     }
     return bins;
 }
-int scaling_needed(const vector<size_t>& bins, const auto BLOCK_WIDTH, const auto MAX_WIDTH) {
-    if (bins.size() == 0) {
+int scaling_needed(const vector<size_t>& bins, const auto BLOCK_WIDTH, const auto MAX_WIDTH)
+{
+    if (bins.size() == 0)
+    {
         cerr << "Error: the array can't be empty";
         return -1;
     }
     size_t max_width = BLOCK_WIDTH*bins[0];
-    for (size_t bin : bins) {
-        if (BLOCK_WIDTH*bin > max_width) {
-        max_width = BLOCK_WIDTH*bin;
+    for (size_t bin : bins)
+    {
+        if (BLOCK_WIDTH*bin > max_width)
+        {
+            max_width = BLOCK_WIDTH*bin;
         }
     }
-    if (max_width > MAX_WIDTH) {
+    if (max_width > MAX_WIDTH)
+    {
         return 0;
     }
-    else {
+    else
+    {
         return 1;
     }
 
 }
-double max_width (const vector<size_t>&bins, const auto BLOCK_WIDTH) {
+double max_width (const vector<size_t>&bins, const auto BLOCK_WIDTH)
+{
     size_t max_width = BLOCK_WIDTH*bins[0];
-    for (size_t bin: bins) {
-        if (BLOCK_WIDTH*bin > max_width) {
-        max_width = BLOCK_WIDTH*bin;
+    for (size_t bin: bins)
+    {
+        if (BLOCK_WIDTH*bin > max_width)
+        {
+            max_width = BLOCK_WIDTH*bin;
         }
     }
     return max_width;
@@ -91,7 +134,8 @@ void svg_rect(double x, double y, double width, double height, string stroke = "
 {
     cout << "<rect x = '"<< x << "' y = '" << y << "' width = '" << width << " ' height = '" << height << "' stroke = '" << stroke << "' fill = ' " << fill << "'/>";
 }
-void svg_line(double x2,  double y, double stroke_width, double stroke_gap) {
+void svg_line(double x2,  double y, double stroke_width, double stroke_gap)
+{
     cout << " <line stroke-dasharray='" << stroke_width << ", " << stroke_gap << "' x1='" << 0 << "'  y1= '" << y  << "' y2 = '"<< y << "' x2='" << x2 << "' style='stroke: rgb(0, 0, 0)'></line>\n";
 
 }
@@ -109,31 +153,35 @@ show_histogram_svg(const vector<size_t>& bins, const double stroke_width, const 
     const auto MAX_WIDTH = IMAGE_WIDTH - TEXT_WIDTH;
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
     double top = 10;
-    if (!(scaling_needed(bins, BLOCK_WIDTH, MAX_WIDTH))) {
-    size_t max;
-    max = max_width(bins, BLOCK_WIDTH);
-    const double scaling_factor = (double)MAX_WIDTH / max;
-    for (size_t bin : bins)
-        {
-        const double bin_width = BLOCK_WIDTH * bin * scaling_factor;
-        svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
-        svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "blue", "#aaffaa");
-        top += BIN_HEIGHT+VERTICAL_GAP;
-        svg_line(IMAGE_WIDTH, top, stroke_width, stroke_gap);
-        top +=VERTICAL_GAP;
-
-    }
-    }
-    else {
-    for (size_t bin : bins)
+    if (!(scaling_needed(bins, BLOCK_WIDTH, MAX_WIDTH)))
     {
-        const double bin_width = BLOCK_WIDTH * bin;
-        svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
-        svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "blue", "#aaffaa");
-        top += BIN_HEIGHT+VERTICAL_GAP;
-        svg_line(IMAGE_WIDTH, top, stroke_width, stroke_gap);
-        top +=VERTICAL_GAP;
+        size_t max;
+        max = max_width(bins, BLOCK_WIDTH);
+        const double scaling_factor = (double)MAX_WIDTH / max;
+        for (size_t bin : bins)
+        {
+            const double bin_width = BLOCK_WIDTH * bin * scaling_factor;
+            svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
+            svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "blue", "#aaffaa");
+            top += BIN_HEIGHT+VERTICAL_GAP;
+            svg_line(IMAGE_WIDTH, top, stroke_width, stroke_gap);
+            top +=VERTICAL_GAP;
+
+        }
+        svg_text(0, top+VERTICAL_GAP, make_info_text());
     }
+    else
+    {
+        for (size_t bin : bins)
+        {
+            const double bin_width = BLOCK_WIDTH * bin;
+            svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
+            svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "blue", "#aaffaa");
+            top += BIN_HEIGHT+VERTICAL_GAP;
+            svg_line(IMAGE_WIDTH, top, stroke_width, stroke_gap);
+            top +=VERTICAL_GAP;
+        }
+        svg_text(TEXT_LEFT, top+VERTICAL_GAP, make_info_text());
     }
     svg_end();
 }
