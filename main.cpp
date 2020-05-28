@@ -23,11 +23,16 @@ int main()
     DWORD version = info & mask;
     DWORD platform = info >> 16;
     DWORD mask_major = 0x0000ff;
-    DWORD version_major = version & mask_major;
-    DWORD version_minor = version >> 8;
     printf("version: %u\n", version);
-    printf("version_major: %u\n", version_major);
-    printf("version_minor: %u\n", version_minor);
+    if ((info & 0x80000000) == 0) {
+        DWORD version_major = version & mask_major;
+        DWORD version_minor = version >> 8;
+        printf("version_major: %u\n", version_major);
+        printf("version_minor: %u\n", version_minor);
+    }
+    DWORD build = platform;
+    printf("build: %u\n", build);
+
     return 0;
     size_t number_count;
     cerr << "Enter number count: ";
