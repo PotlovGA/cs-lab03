@@ -19,8 +19,9 @@ input_numbers(size_t count)
 int main()
 {
     DWORD info = GetVersion();
-    printf("version(dec): %u\n", info);
-    printf("version(hex): %x\n", info);
+    DWORD mask = 0b00000000'00000000'11111111'11111111;
+    DWORD version = info & mask;
+    printf("version: %u\n", version);
     return 0;
     size_t number_count;
     cerr << "Enter number count: ";
